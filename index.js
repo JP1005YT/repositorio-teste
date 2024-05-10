@@ -1,15 +1,18 @@
-import express from 'express';
-import http from 'http';
+const https = require('https');
+const fs = require('fs');
+const express = require('express');
 
 const app = express();
 
-// Middleware para servir arquivos estáticos
-app.use(express.static("public"));
+app.use(express.static("public"))
 
-// Criação do servidor HTTP
-const server = http.createServer(app);
+const options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+};
 
-// Iniciando o servidor na porta 5500
-server.listen(5500, () => {
-    console.log('Servidor HTTP aberto na porta 5500');
+// Suas rotas e configurações do Express aqui...
+
+https.createServer(options, app).listen(5500, () => {
+    console.log('Servidor HTTPS iniciado na porta 443');
 });
